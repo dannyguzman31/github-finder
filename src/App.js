@@ -28,6 +28,9 @@ class App extends Component {
   clearUsers = () => this.setState({ users: [], loading: false });
 
   render() {
+
+    const { users, loading} = this.state;
+
     return (
       <div className="App">
         <Navbar />
@@ -38,8 +41,8 @@ class App extends Component {
           showClear={this.state.users.length > 0 ? true : false}
           />
           <Users
-            loading={this.state.loading}
-            users={this.state.users}
+            loading={loading}
+            users={users}
           />
         </div>
       </div>
