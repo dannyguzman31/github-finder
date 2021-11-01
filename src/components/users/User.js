@@ -1,10 +1,14 @@
-import React, { Fragment, useEffect } from "react";
-import Spinner from "../layout/Spinner";
-import Repos from "../repos/Repos";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import React, { Fragment, useEffect, useContext } from 'react';
+import Spinner from '../layout/Spinner';
+import Repos from '../repos/Repos';
+import { Link } from 'react-router-dom';
+import GithubContext from '../../context/github/githubContext';
 
-const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
+const User = ({ match }) => {
+  const githubContext = useContext(GithubContext);
+
+  const { getUser, loading, user, repos, getUserRepos } = githubContext;
+
   useEffect(() => {
     getUser(match.params.login);
     getUserRepos(match.params.login);
@@ -13,10 +17,10 @@ const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
 
   const {
     name,
+    company,
     avatar_url,
     location,
     bio,
-    company,
     blog,
     login,
     html_url,
@@ -24,29 +28,29 @@ const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
     following,
     public_repos,
     public_gists,
-    hireable,
+    hireable
   } = user;
 
   if (loading) return <Spinner />;
 
   return (
     <Fragment>
-      <Link to="/" className="btn btn-light">
-        Back to Search
+      <Link to='/' className='btn btn-light'>
+        Back To Search
       </Link>
-      Hireable: {""}
+      Hireable:{' '}
       {hireable ? (
-        <i className="fas fa-check text-success" />
+        <i className='fas fa-check text-success' />
       ) : (
-        <i className="fas fa-time-circle text-danger" />
+        <i className='fas fa-times-circle text-danger' />
       )}
-      <div className="card grid-2">
-        <div className="all-center">
+      <div className='card grid-2'>
+        <div className='all-center'>
           <img
             src={avatar_url}
-            className="round-img"
-            alt=""
-            style={{ width: "150px" }}
+            className='round-img'
+            alt=''
+            style={{ width: '150px' }}
           />
           <h1>{name}</h1>
           <p>Location: {location}</p>
@@ -54,12 +58,11 @@ const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
         <div>
           {bio && (
             <Fragment>
-              <h3 style={{ textAlign: "center" }}>Bio</h3>
+              <h3>Bio</h3>
               <p>{bio}</p>
             </Fragment>
           )}
-          <a href={html_url} className="btn btn-dark my-1">
-            {" "}
+          <a href={html_url} className='btn btn-dark my-1'>
             Visit Github Profile
           </a>
           <ul>
@@ -70,6 +73,7 @@ const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
                 </Fragment>
               )}
             </li>
+
             <li>
               {company && (
                 <Fragment>
@@ -77,6 +81,7 @@ const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
                 </Fragment>
               )}
             </li>
+
             <li>
               {blog && (
                 <Fragment>
@@ -87,23 +92,15 @@ const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
           </ul>
         </div>
       </div>
-      <div className="card text-center">
-        <div className="badge badge-primary"> Followers: {followers}</div>
-        <div className="badge badge-success"> Following: {following}</div>
-        <div className="badge badge-light"> Public Repos: {public_repos}</div>
-        <div className="badge badge-dark"> Public Gists: {public_gists}</div>
+      <div className='card text-center'>
+        <div className='badge badge-primary'>Followers: {followers}</div>
+        <div className='badge badge-success'>Following: {following}</div>
+        <div className='badge badge-light'>Public Repos: {public_repos}</div>
+        <div className='badge badge-dark'>Public Gists: {public_gists}</div>
       </div>
       <Repos repos={repos} />
     </Fragment>
   );
-};
-
-User.propTypes = {
-  loading: PropTypes.bool,
-  user: PropTypes.object.isRequired,
-  getUser: PropTypes.func.isRequired,
-  repos: PropTypes.array.isRequired,
-  getUserRepos: PropTypes.func.isRequired,
 };
 
 export default User;
